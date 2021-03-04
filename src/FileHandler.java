@@ -21,6 +21,7 @@ public class FileHandler {
             if(userRegisterMap.containsKey(name))
                 System.out.println("Such user already exists. Please enter a different name.");
 
+
             else {
                 userRegisterMap.put(name, age);
                 saveToFile();
