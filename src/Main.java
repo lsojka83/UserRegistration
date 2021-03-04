@@ -7,13 +7,14 @@ public class Main {
 
         boolean programIsRunning = true;
 
+
         //program loop
         while (programIsRunning) {
 
-            String command = "", name = "";
+            String command , name;
             FileHandler fileHandler = new FileHandler(); //external class for file operations
 
-            int age = 0;
+            int age;
 
             //regex pattern setup
             String regexAdd = "addUser\\(\"(\\w+)\",(\\d{1,1000})\\)";
