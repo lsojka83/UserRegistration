@@ -6,8 +6,15 @@ import java.util.Map;
 public class FileHandler {
 
     //file setup
-    String fileName = "user_register.txt";
-    File file = null;
+    String fileName = "user_register.bin";
+    File file;
+
+    public FileHandler()
+    {
+        file = new File(fileName);
+    }
+
+    boolean fileExists = false;
 
     HashMap<String,Integer> userRegisterMap = new HashMap<>();
 
@@ -35,6 +42,8 @@ public class FileHandler {
         //File open
             loadFromFile();
 
+            if(fileExists)
+
             //check if user exists
             if(userRegisterMap.containsKey(name)) {
                 userRegisterMap.remove(name);
@@ -56,18 +65,23 @@ public class FileHandler {
 
     }
 
-    private void loadFromFile()
-    {
-        try {
-            file = new File(fileName);
-            FileInputStream fileInputStream = new FileInputStream(file);
-            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+    private void loadFromFile() {
+
+        if (chechIfFileExist()) {
+            try {
+                FileInputStream fileInputStream = new FileInputStream(file);
+                ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 //            userRegisterMap = (HashMap<String, Integer>) objectInputStream.readObject();
-            userRegisterMap = (HashMap<String, Integer>) objectInputStream.readObject();
-            objectInputStream.close();
-            fileInputStream.close();
+                userRegisterMap = (HashMap<String, Integer>) objectInputStream.readObject();
+                objectInputStream.close();
+                fileInputStream.close();
+            } catch (Exception e) {
+                System.out.println("Can't load to file.");
+            }
         }
-        catch (Exception e){ System.out.println("Can't load to file.");}
+        else
+            System.out.println("File doesn't exist.");
+
     }
 
     private void saveToFile()
@@ -79,9 +93,18 @@ public class FileHandler {
             objectOutputStream.flush();
             objectOutputStream.close();
             fileOutputStream.close();
+
+            if(!fileExists)
+                System.out.println("Creating a file.");
         }
         catch (Exception e){
             System.out.println("Can't save to file.");
         }
-        }
+    }
+
+    private boolean chechIfFileExist()
+    {
+        fileExists = file.exists();
+        return fileExists;
+    }
 }
