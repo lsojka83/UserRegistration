@@ -20,6 +20,7 @@ public class Main {
             String regexAdd = "addUser\\(\"(\\w+)\",(\\d{1,1000})\\)";
             String regexRemove = "removeUser\\(\"(\\w+)\"\\)";
 
+
             //
             Scanner scanner = new Scanner(System.in);
             System.out.println("Enter:\n<<addUser(\"name\",age)>> to add a new user, \n"
