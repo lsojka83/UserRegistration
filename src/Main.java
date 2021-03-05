@@ -1,26 +1,15 @@
 import java.util.Scanner;
-import java.util.regex.*;
 
 public class Main {
 
     public static void main(String[] args) {
 
         boolean programIsRunning = true;
-
+        String userInput, command , name;
+        int age;
 
         //program loop
         while (programIsRunning) {
-
-            String command , name;
-            FileHandler fileHandler = new FileHandler(); //external class for file operations
-
-            int age;
-
-            //regex pattern setup
-            String regexAdd = "addUser\\(\"(\\w+)\",(\\d{1,1000})\\)";
-            String regexRemove = "removeUser\\(\"(\\w+)\"\\)";
-
-
             //
             Scanner scanner = new Scanner(System.in);
             System.out.println("Enter:\n<<addUser(\"name\",age)>> to add a new user, \n"
@@ -28,45 +17,35 @@ public class Main {
                     +"<<showfile>> to view current user list,\n"
                     +"<<quit>> to quit the program.");
 
-            command = scanner.nextLine();
+            userInput = scanner.nextLine();
+            FileHandler fileHandler = new FileHandler(); //external class for file operations
+            Validation validation = new Validation(userInput);
+//            validation.setInput(userInput);
 
-            // check if to add or remove
-            Pattern patternAdd = Pattern.compile(regexAdd);
-            Matcher matcherAdd = patternAdd.matcher(command);
-            Pattern patternRemove = Pattern.compile(regexRemove);
-            Matcher matcherRemove = patternRemove.matcher(command);
+            command = validation.getCommand();
+//            System.out.println(command);
+            name = validation.getName();
+            age = validation.getAge();
 
-            // if to add
-            boolean isMatchingForAdding = matcherAdd.matches(), isMatchingForRemoving = matcherRemove.matches();
-            if (isMatchingForAdding)
-            {
-                name = matcherAdd.group(1);
-                age = Integer.parseInt(matcherAdd.group(2));
-                fileHandler.addUserToFile(name, age);
-                //  if to remove
-            } else if (isMatchingForRemoving)
-            {
-                name = matcherRemove.group(1);
-                fileHandler.removeUserFromFile(name);
+            switch (command) {
+                case "addUser":             // if to add
+                    fileHandler.addUserToFile(name, age);
+                    break;
 
+                case "removeUser":                    //  if to remove
+                    fileHandler.removeUserFromFile(name);
+                    break;
+                case "showfile":                //  show file printout
+                    fileHandler.showFile();
+                    break;
+                case "quit":                //  quit program loop
+                    System.out.println("Quitting");
+                    programIsRunning = false;
+                    break;
+                case "Incorrect command":
+                    System.out.println("Incorrect command");
+                    break;
             }
-            //  show file printout
-            else if(command.equals("showfile"))
-            {
-                fileHandler.showFile();
-            }
-            //  quit program loop
-            else if(command.equals("quit"))
-            {
-                System.out.println("Quitting");
-                programIsRunning = false;
-            }
-
-            else
-                System.out.println("Incorrect command");
-
         }
     }
-
-
 }
